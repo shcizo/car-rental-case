@@ -5,4 +5,5 @@ namespace CarRental.Core.Interfaces;
 public interface ISettingsRepository
 {
     Task<Setting?> GetSettings(CancellationToken cancellationToken);
+    Task UpdateSettings(Setting settings);
 }

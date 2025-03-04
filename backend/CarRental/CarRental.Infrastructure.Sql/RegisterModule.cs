@@ -12,7 +12,7 @@ public static class RegisterModule
         services.AddSqlServer<CarRentalContext>(configuration.GetConnectionString("DefaultConnection"));
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<ICarRepository, CarRepository>();
-        
+        services.AddScoped<ISettingsRepository, SettingsRepository>();
         return services;
     }
 }

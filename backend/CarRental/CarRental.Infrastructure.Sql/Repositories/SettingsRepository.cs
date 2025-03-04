@@ -10,4 +10,10 @@ public class SettingsRepository(CarRentalContext context) : ISettingsRepository
     {
         return await context.Settings.FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task UpdateSettings(Setting settings)
+    {
+        context.Entry(settings).State = EntityState.Modified;
+        await context.SaveChangesAsync();
+    }
 }

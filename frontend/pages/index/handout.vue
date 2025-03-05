@@ -52,7 +52,7 @@
 import { ref, computed } from "vue";
 
 const initialized = ref(false);
-const items = ["SmallCar", "WagonCar", "Truck"];
+const items = ["SmallCar", "StationWagon", "Truck"];
 const router = useRouter();
 const handout = ref({});
 

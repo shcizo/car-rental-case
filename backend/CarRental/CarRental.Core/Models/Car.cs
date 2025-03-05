@@ -14,6 +14,6 @@ public enum CarType
 {
     None = 0,
     SmallCar = 1,
-    WagonCar = 2,
-    TruckCar = 3,
+    StationWagon = 2,
+    Truck = 3,
 }

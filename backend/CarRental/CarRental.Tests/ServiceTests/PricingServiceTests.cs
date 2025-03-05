@@ -33,6 +33,21 @@ public class PricingServiceTests
         // Assert
         price.Should().Be(_settings.BaseDayFee);
     }
+    
+    [Test]
+    public void CalculatePrice_SmallCar_OneHalfDayRental_ReturnsBaseDayFee()
+    {
+        // Arrange
+        var rentalDuration = TimeSpan.FromHours(12); // 1 full day
+        const int distance = 100;
+        const CarType carType = CarType.SmallCar;
+
+        // Act
+        var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);
+
+        // Assert
+        price.Should().Be(_settings.BaseDayFee);
+    }
 
     [Test]
     public void CalculatePrice_WagonCar_TwoDaysRental_ReturnsCorrectPrice()
@@ -40,7 +55,7 @@ public class PricingServiceTests
         // Arrange
         var rentalDuration = TimeSpan.FromHours(48); // 2 full days
         var distance = 0;
-        var carType = CarType.WagonCar;
+        var carType = CarType.StationWagon;
 
         // Act
         var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);
@@ -50,12 +65,27 @@ public class PricingServiceTests
     }
 
     [Test]
+    public void CalculatePrice_WagonCar_11HourRental_ReturnsCorrectPrice()
+    {
+        // Arrange
+        var rentalDuration = TimeSpan.FromHours(11);
+        var distance = 100;
+        var carType = CarType.StationWagon;
+
+        // Act
+        var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);
+
+        // Assert
+        price.Should().Be(_settings.BaseKmFee * distance + _settings.BaseDayFee * 1.3m);
+    }
+
+    [Test]
     public void CalculatePrice_TruckCar_WithDistance_ReturnsCorrectPrice()
     {
         // Arrange
         var rentalDuration = TimeSpan.FromHours(24); // 1 full day
         var distance = 50;
-        var carType = CarType.TruckCar;
+        var carType = CarType.Truck;
 
         // Act
         var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);
@@ -70,7 +100,7 @@ public class PricingServiceTests
         // Arrange
         var rentalDuration = TimeSpan.FromHours(24); // 1 full day
         var distance = 30;
-        var carType = CarType.WagonCar;
+        var carType = CarType.StationWagon;
 
         // Act
         var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);

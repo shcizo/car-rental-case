@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Core", "CarRental
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Infrastructure", "CarRental.Infrastructure\CarRental.Infrastructure.csproj", "{3C638902-1FC4-44AB-9F38-FD732FA6AAF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.SharedKernel", "CarRental.SharedKernel\CarRental.SharedKernel.csproj", "{23940421-AC6F-4452-8E84-E08F8B24D1D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{3C638902-1FC4-44AB-9F38-FD732FA6AAF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C638902-1FC4-44AB-9F38-FD732FA6AAF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C638902-1FC4-44AB-9F38-FD732FA6AAF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23940421-AC6F-4452-8E84-E08F8B24D1D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23940421-AC6F-4452-8E84-E08F8B24D1D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23940421-AC6F-4452-8E84-E08F8B24D1D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23940421-AC6F-4452-8E84-E08F8B24D1D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

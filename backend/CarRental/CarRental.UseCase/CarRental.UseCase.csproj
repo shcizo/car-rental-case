@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CarRental.Infrastructure.Sql\CarRental.Infrastructure.Sql.csproj" />
+      <ProjectReference Include="..\CarRental.SharedKernel\CarRental.SharedKernel.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -54,6 +54,11 @@
                     Clear
                 </UButton>
             </div>
+            <!-- Display Calculated Price if available -->
+            <div v-if="booking.calculatedPrice !== null" class="mt-4 p-4 bg-gray-100 rounded">
+                <h2 class="text-lg font-semibold">Total Rental Cost</h2>
+                <p class="text-xl font-bold">€{{ booking.calculatedPrice }}</p>
+            </div>
         </UCard>
     </div>
 </template>
@@ -68,7 +73,8 @@ const booking = ref({
     date: "",
     odometer: "",
     returnDate: "",
-    returnOdometer: ""
+    returnOdometer: "",
+    calculatedPrice: null
 });
 
 const loading = ref(false);
@@ -88,8 +94,6 @@ const initializeReturn = async () => {
             return;
         }
 
-
-
         const formattedDate = new Date(data.handOutDateUtc).toISOString().slice(0, 16);
 
         const formattedReturnDate = !data.returnDateUtc ? "" : new Date(data.returnDateUtc).toISOString().slice(0, 16);
@@ -102,7 +106,8 @@ const initializeReturn = async () => {
             date: formattedDate,
             odometer: data.odometer,
             returnDate: formattedReturnDate,
-            returnOdometer: data.returnOdeMeter
+            returnOdometer: data.returnOdeMeter,
+            calculatedPrice: data.calculatedPrice
         };
 
         initialized.value = data.returnDateUtc === null;
@@ -137,7 +142,7 @@ const submitReturn = async () => {
             })
         });
 
-
+        await initializeReturn();
     } catch (error) {
         console.error("Error submitting return:", error);
         alert("Failed to process return.");

@@ -13,15 +13,15 @@ public static class SettingsEndpoints
 
         groupRoutes.MapPost("", async (SaveSettingsModel model, IMediator mediator) =>
         {
-            await mediator.Send(new SaveSettingsCommand(model.DealerShipName, model.DealerShipShortName, model.BaseDistanceFee, model.BaseDayFee));
-            return Results.Ok();
+            var result = await mediator.Send(new SaveSettingsCommand(model.DealerShipName, model.DealerShipShortName, model.BaseDistanceFee, model.BaseDayFee));
+            return result.ToMinimalApiResult();
         });
 
         groupRoutes.MapGet("", async (IMediator mediator) =>
         {
             var result =await mediator.Send(new GetQuery());
             
-            return Results.Ok(result);
+            return result.ToMinimalApiResult();
         });
     }
 }

@@ -1,6 +1,6 @@
 namespace CarRental.UseCase.Settings.Dto;
 
-public class SettingsDto
+public class SettingDto
 {
     public required string DealerShipName { get; set; }
     public required string DealerShipShortName { get; set; }

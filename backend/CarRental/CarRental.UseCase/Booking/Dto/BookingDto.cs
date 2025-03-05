@@ -2,7 +2,7 @@ namespace CarRental.UseCase.Booking.Dto;
 
 public class BookingDto
 {
-    public string BookingNumber { get; set; }
+    public required string BookingNumber { get; set; }
     public string? RegistrationNumber { get; set; }
     public DateTimeOffset? HandOutDateUtc { get; set; }
     public DateTimeOffset? ReturnDateUtc { get; set; }

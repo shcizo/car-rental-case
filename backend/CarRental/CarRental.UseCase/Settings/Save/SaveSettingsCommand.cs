@@ -3,7 +3,7 @@ using CarRental.Core.Models;
 using CarRental.SharedKernel;
 using MediatR;
 
-namespace CarRental.UseCase.Settings;
+namespace CarRental.UseCase.Settings.Save;
 
 public record SaveSettingsCommand(string DealerShipName, string DealerShipShortName, decimal BaseDistanceFee, decimal BaseDayFee) : IRequest<Result>;
 
@@ -11,7 +11,7 @@ public class SaveSettingsHandler(ISettingsRepository settingsRepository) : IRequ
 {
     public async Task<Result> Handle(SaveSettingsCommand request, CancellationToken cancellationToken)
     {
-        var settings = await settingsRepository.GetSettings(cancellationToken) ?? new Setting();
+        var settings = await settingsRepository.GetSettings(cancellationToken) ?? new Setting(); 
         settings.DealerShipName = request.DealerShipName;
         settings.DealerShortName = request.DealerShipShortName;
         settings.BaseDayFee = request.BaseDayFee;

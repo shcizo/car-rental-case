@@ -1,5 +1,5 @@
+using CarRental.Api.Extensions;
 using CarRental.Api.Models;
-using CarRental.Core.Models;
 using CarRental.UseCase.Booking.Create;
 using CarRental.UseCase.Booking.Get;
 using CarRental.UseCase.Booking.Init;
@@ -21,8 +21,7 @@ public static class BookingEndpoints
     private static bool IsValidBooking(CreateBooking booking)
     {
         return (string.IsNullOrWhiteSpace(booking.CustomerIdentification) ||
-               string.IsNullOrWhiteSpace(booking.RegistrationNumber) ||
-               string.IsNullOrWhiteSpace(booking.Type) ||
+                booking.CarId < 0 ||
                DateTimeOffset.MinValue == booking.Date) is false;
 
     }
@@ -50,10 +49,13 @@ public static class BookingEndpoints
         group.MapPut("/{bookingNr}", async (string bookingNr, [FromBody] CreateBooking createBooking, [FromServices] IMediator mediator) =>
         {
             if (!IsValidBooking(createBooking))
-                return Results.BadRequest("Values are invalid.");
+                return Results.BadRequest(new ProblemDetails()
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = "Values are invalid.",
+                });
             
-            var result = await mediator.Send(new CreateCommand(bookingNr, createBooking.RegistrationNumber, createBooking.CustomerIdentification,
-                Enum.Parse<CarType>(createBooking.Type), createBooking.Date, createBooking.Odometer));
+            var result = await mediator.Send(new CreateCommand(bookingNr, createBooking.CarId, createBooking.CustomerIdentification, createBooking.Date));
 
             return result.ToMinimalApiResult();
         });

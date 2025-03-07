@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace CarRental.SharedKernel;
+﻿namespace CarRental.SharedKernel;
 
 public enum ResultStatus
 {
@@ -15,6 +13,7 @@ public enum ResultStatus
     CriticalError,
     Unavailable
 }
+
 /// <summary>
 /// Represents a result of an operation with a return value.
 /// </summary>
@@ -41,17 +40,6 @@ public class Result<T>
     public static Result<T> Failure(string error) => new(error, ResultStatus.Error);
     public static Result<T> NotFound(string error) => new(error, ResultStatus.NotFound);
     public static Result<T> Invalid(string error) => new(error, ResultStatus.Invalid);
-
-    public IResult ToMinimalApiResult()
-    {
-        return Status switch
-        {
-            ResultStatus.Ok => Results.Ok(Value),
-            ResultStatus.Invalid => Results.BadRequest(Error),
-            ResultStatus.NotFound => Results.NotFound(Error),
-            _ => Results.InternalServerError(Error)
-        };
-    }
 }
 
 /// <summary>
@@ -71,16 +59,4 @@ public class Result
     public static Result Failure(string error) => new(ResultStatus.Error, error);
     public static Result NotFound(string error) => new(ResultStatus.NotFound, error);
     public static Result Invalid(string error) => new(ResultStatus.Invalid, error);
-    
-    public IResult ToMinimalApiResult()
-    {
-        return Status switch
-        {
-            ResultStatus.Ok => Results.Ok(),
-            ResultStatus.Invalid => Results.BadRequest(Error),
-            ResultStatus.NotFound => Results.NotFound(Error),
-            _ => Results.InternalServerError(Error)
-        };
-    }
-
 }

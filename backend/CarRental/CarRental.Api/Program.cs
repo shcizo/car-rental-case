@@ -13,6 +13,7 @@ var app = builder.Build();
 
 app.MapBookingEndpoints();
 app.MapSettingsEndpoints();
+app.MapCarEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

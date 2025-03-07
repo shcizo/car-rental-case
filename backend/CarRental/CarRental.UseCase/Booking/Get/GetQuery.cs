@@ -24,7 +24,7 @@ public class GetQueryHandler(IBookingRepository bookingRepository) : IRequestHan
             CalculatedPrice = booking.CalculatedPrice,
             CusomterIdentifcation = booking.CusomterIdentifcation,
             RegistrationNumber = booking.Car?.RegistrationNumber,
-            Odometer = booking.Car?.Odemeter ?? 0,
+            Odometer = booking.StartOdometer ?? 0,
         });
     }
 }

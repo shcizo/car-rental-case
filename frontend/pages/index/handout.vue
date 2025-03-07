@@ -8,19 +8,39 @@
         </div>
         <UCard class="p-4" :hidden="!initialized">
             <!-- Booking Form -->
-            <UForm :state="handout" >
+            <UForm :state="handout">
                 <div class="mb-4">
                     <UInput v-model="booking.bookingNumber" label="Bookingnumber" disabled />
                 </div>
 
                 <div class="mb-4 flex gap-4">
                     <!-- Registration Number Input -->
-                    <UInput v-model="booking.registrationNumber" label="Registration Number" placeholder="reg nr"
+                    <UInput v-model="booking.registrationNumber" label="Registration Number" placeholder="Enter reg nr"
                         class="flex-1" :disabled="!initialized" />
 
+                    <!-- Search/Create Button -->
+                    <UButton :loading="searching" @click="handleSearch" v-if="!carNotFound">
+                        Search
+                    </UButton>
+                    <UButton :loading="creating" @click="handleCreate" v-if="carNotFound">
+                        Create
+                    </UButton>
+                </div>
+
+                <div class="mb-4 flex gap-4">
                     <!-- Car Type Dropdown -->
                     <USelect v-model="booking.type" :options="items" :disabled="!initialized" />
                 </div>
+
+                <div class="mb-4">
+                    <UInput placeholder="Odometer" v-model="booking.odometer" label="Odometer"
+                        :disabled="!initialized || !carNotFound">
+                        <template #trailing>
+                            <span class="text-gray-500 dark:text-gray-400 text-xs">KM</span>
+                        </template>
+                    </UInput>
+                </div>
+
                 <div class="mb-4">
                     <UInput v-model="booking.customerIdentification" label="Customer ID" placeholder="customer id"
                         :disabled="!initialized" />
@@ -30,15 +50,6 @@
                     <UInput v-model="booking.date" label="Date" type="datetime-local" :disabled="!initialized" />
                 </div>
 
-                <div class="mb-4">
-                    <UInput placeholder="Odometer" v-model="booking.odometer" label="Odometer" :disabled="!initialized">
-
-                        <template #trailing>
-                            <span class="text-gray-500 dark:text-gray-400 text-xs">KM</span>
-                        </template>
-
-                    </UInput>
-                </div>
             </UForm>
 
             <div class="mb-4">
@@ -62,19 +73,15 @@ const booking = ref({
     customerIdentification: "",
     type: "",
     date: "",
-    odometer: ""
-});
-
-const hasInvalidChars = ref(false);
-
-const validateOdometer = computed(() => {
-    hasInvalidChars.value = /\D/.test(booking.value.odometer); // Check if there's any non-numeric character
+    odometer: "",
+    carId: 0,
 });
 
 const loading = ref(false);
 
 const createBooking = async () => {
     loading.value = true;
+    console.log(booking.value)
 
     try {
         const response = await fetch("http://localhost:5270/bookings/" + booking.value.bookingNumber, {
@@ -112,4 +119,74 @@ const initializeBooking = async () => {
         loading.value = false;
     }
 };
+
+
+const searching = ref(false);
+const carNotFound = ref(false);
+const creating = ref(false);
+
+const handleCreate = async () => {
+    if (!booking.value.registrationNumber ||
+        !booking.value.odometer ||
+        !booking.value.type
+    ) return;
+
+    try {
+        creating.value = true;
+        const response = await fetch(`http://localhost:5270/cars/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                'registrationNumber': booking.value.registrationNumber,
+                'odometer': booking.value.odometer,
+                'type': booking.value.type
+            })
+        });
+        
+        const data = response.json();
+        booking.value.carId = data.id;
+
+        await handleSearch();
+    } catch (error) {
+        console.error("Error fetching car:", error);
+    } finally {
+        creating.value = false;
+    }
+    
+}
+
+
+const handleSearch = async () => {
+    if (!booking.value.registrationNumber) return; // Prevent empty search
+    searching.value = true;
+
+    try {
+        const response = await fetch(`http://localhost:5270/cars/${booking.value.registrationNumber}`, { method: "GET" });
+
+        if (response.status === 404) {
+            carNotFound.value = true; // Show "Create" button
+            return;
+        }
+
+        const car = await response.json();
+
+        const carTypeMap = {
+            1: "SmallCar",
+            2: "StationWagon",
+            3: "Truck"
+        };
+
+        booking.value.type = carTypeMap[car.type] || "";
+        booking.value.odometer = car.odemeter;
+        booking.value.carId = car.id
+        carNotFound.value = false; // Keep button as "Search"
+    } catch (error) {
+        console.error("Error fetching car:", error);
+    } finally {
+        searching.value = false;
+    }
+};
+
 </script>

@@ -4,6 +4,9 @@ namespace CarRental.UseCase.Services;
 
 public class PricingService
 {
+    private const decimal WagonConstant = 1.3m;
+    private const decimal SmallCarConstant = 1m;
+    private const decimal TruckConstant = 1.5m;
     public static decimal CalculatePrice(int distance, CarType carType, Setting settings, TimeSpan rentalDuration)
     {
         var basePrice = CalculateBasePrice(carType, settings, rentalDuration);
@@ -15,22 +18,26 @@ public class PricingService
     private static decimal CalculateBasePrice(CarType carType, Setting settings, TimeSpan rentalDuration)
     {
         var daysCharged = decimal.Ceiling(Convert.ToDecimal(rentalDuration.TotalDays));
-        return carType switch
+        var multiplier = carType switch
         {
-            CarType.SmallCar => daysCharged * settings.BaseDayFee,
-            CarType.StationWagon => daysCharged * settings.BaseDayFee * 1.3m,
-            CarType.Truck => daysCharged * settings.BaseDayFee * 1.3m,
+            CarType.SmallCar => SmallCarConstant,
+            CarType.StationWagon =>  WagonConstant,
+            CarType.Truck => TruckConstant,
             _ => 0,
         };
+        
+        return daysCharged * settings.BaseDayFee * multiplier;
     }
 
     private static decimal CalculateDistancePrice(int distance, CarType carType, Setting settings)
     {
-        return carType switch
+        var multiplier = carType switch
         {
-            CarType.StationWagon => settings.BaseKmFee * distance,
-            CarType.Truck => settings.BaseKmFee * distance * 1.5m,
+            CarType.StationWagon => 1m,
+            CarType.Truck => TruckConstant,
             _ => 0,
         };
+        
+        return settings.BaseKmFee * distance * multiplier;
     }
 }

@@ -91,7 +91,7 @@ public class PricingServiceTests
         var price = PricingService.CalculatePrice(distance, carType, _settings, rentalDuration);
 
         // Assert
-        price.Should().Be(_settings.BaseDayFee * 1.3m + _settings.BaseKmFee * distance * 1.5m);
+        price.Should().Be(_settings.BaseDayFee * 1.5m + _settings.BaseKmFee * distance * 1.5m);
     }
 
     [Test]

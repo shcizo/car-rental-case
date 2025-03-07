@@ -28,9 +28,9 @@ public class ReturnCommandHandler(IBookingRepository bookingRepository, ICarRepo
         booking.ReturnOdeMeter = request.Odometer;
         booking.ReturnDateUtc = request.Date;
 
-        var oldOdometer = booking.Car!.Odemeter;
+        var oldOdometer = booking.Car!.Odometer;
         var newOdometer = request.Odometer;
-        booking.Car!.Odemeter = newOdometer;
+        booking.Car!.Odometer = newOdometer;
         var rentalDuration = booking.ReturnDateUtc!.Value - booking.HandOutDateUtc!.Value;
         booking.CalculatedPrice = PricingService.CalculatePrice(newOdometer - oldOdometer, booking.Car.Type, settings, rentalDuration);
 

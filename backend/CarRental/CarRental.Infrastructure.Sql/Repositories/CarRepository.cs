@@ -11,6 +11,11 @@ public class CarRepository(CarRentalContext context) : ICarRepository
         return await context.Cars.FirstOrDefaultAsync(car => car.RegistrationNumber == registrationNumber, cancellationToken);
     }
 
+    public async Task<Car?> GetCarById(int carId, CancellationToken cancellationToken)
+    {
+        return await context.Cars.FirstOrDefaultAsync(car => car.Id == carId, cancellationToken);
+    }
+
     public async Task CreateCar(Car car)
     {
         context.Cars.Add(car);

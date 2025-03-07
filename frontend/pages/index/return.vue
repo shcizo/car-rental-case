@@ -31,7 +31,7 @@
 
                 <!-- Editable Fields for Return -->
                 <div class="mb-4">
-                    <UInput v-model="booking.returnDate" label="Return Date" type="datetime-local">
+                    <UInput v-model="booking.returnDate" label="Return Date" type="datetime-local" :disabled="!initialized">
                         <template #trailing>
                             <UButton size="xs" @click="setReturnDateNow">Now</UButton>
                         </template>
@@ -40,7 +40,7 @@
 
                 <div class="mb-4">
                     <UInput placeholder="Return Odometer" v-model="booking.returnOdometer" label="Return Odometer"
-                        :class="{ 'border-red-500': hasInvalidChars }" @input="validateReturnOdometer" />
+                        :class="{ 'border-red-500': hasInvalidChars }" @input="validateReturnOdometer" :disabled="!initialized"/>
                 </div>
             </UForm>
             <div class="flex gap-4 mt-4">
@@ -55,7 +55,7 @@
                 </UButton>
             </div>
             <!-- Display Calculated Price if available -->
-            <div v-if="booking.calculatedPrice !== null" class="mt-4 p-4 bg-gray-100 rounded">
+            <div v-if="booking.calculatedPrice !== null" class="mt-4 p-4 bg-gray-100 rounded text-red-300">
                 <h2 class="text-lg font-semibold">Total Rental Cost</h2>
                 <p class="text-xl font-bold">€{{ booking.calculatedPrice }}</p>
             </div>

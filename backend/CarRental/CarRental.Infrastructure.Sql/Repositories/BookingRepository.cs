@@ -11,6 +11,11 @@ public class BookingRepository(CarRentalContext context) : IBookingRepository
         return await context.Bookings.Include(booking => booking.Car).FirstOrDefaultAsync(x => x.BookingNumber == bookingNumber, cancellationToken);
     }
 
+    public async Task<Booking?> GetActiveBookingByCarId(int carId, CancellationToken cancellationToken)
+    {
+        return await context.Bookings.Include(booking => booking.Car).FirstOrDefaultAsync(x => x.Id == carId && x.ReturnDateUtc != null, cancellationToken);
+    }
+
     public async Task UpdateBooking(Booking booking)
     {
         context.Entry(booking).State = EntityState.Modified;

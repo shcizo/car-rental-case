@@ -13,6 +13,13 @@ public class SettingsRepository(CarRentalContext context) : ISettingsRepository
 
     public async Task UpdateSettings(Setting settings)
     {
+        if (context.Entry(settings).State == EntityState.Detached)
+        {
+            context.Settings.Add(settings);
+            await context.SaveChangesAsync();
+            return;
+        }
+        
         context.Entry(settings).State = EntityState.Modified;
         await context.SaveChangesAsync();
     }

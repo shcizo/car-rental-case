@@ -1,6 +1,7 @@
+using CarRental.Api.Extensions;
 using CarRental.Api.Models;
-using CarRental.UseCase.Settings;
 using CarRental.UseCase.Settings.Get;
+using CarRental.UseCase.Settings.Save;
 using MediatR;
 
 namespace CarRental.Api.Endpoints;

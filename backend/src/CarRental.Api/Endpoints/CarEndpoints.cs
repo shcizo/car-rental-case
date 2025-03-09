@@ -21,7 +21,7 @@ public static class CarEndpoints
 
         group.MapPost("", async (CreateCarModel model, IMediator mediator) =>
         {
-            var result = await mediator.Send(new Create(model.RegistrationNumber, model.Odometer, Enum.Parse<CarType>(model.Type)));
+            var result = await mediator.Send(new CreateCommand(model.RegistrationNumber, model.Odometer, Enum.Parse<CarType>(model.Type)));
             return result.ToMinimalApiResult();
         });
     }

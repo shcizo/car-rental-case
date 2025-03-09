@@ -5,11 +5,11 @@ using MediatR;
 
 namespace CarRental.UseCase.Car.Create;
 
-public record Create(string RegistrationNr, int Odometer, CarType Type) : IRequest<Result<int>>;
+public record CreateCommand(string RegistrationNr, int Odometer, CarType Type) : IRequest<Result<int>>;
 
-public class CreateHandler(ICarRepository carRepository) : IRequestHandler<Create, Result<int>>
+public class CreateHandler(ICarRepository carRepository) : IRequestHandler<CreateCommand, Result<int>>
 {
-    public async Task<Result<int>> Handle(Create request, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(CreateCommand request, CancellationToken cancellationToken)
     {
         var existingCar = await carRepository.GetCarByRegNr(request.RegistrationNr, cancellationToken);
         if (existingCar is not null) return Result<int>.Invalid("Car already exists");

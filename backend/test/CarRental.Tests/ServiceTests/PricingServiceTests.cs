@@ -38,7 +38,7 @@ public class PricingServiceTests
     public void CalculatePrice_SmallCar_OneHalfDayRental_ReturnsBaseDayFee()
     {
         // Arrange
-        var rentalDuration = TimeSpan.FromHours(12); // 1 full day
+        var rentalDuration = TimeSpan.FromHours(12); // 1 half day
         const int distance = 100;
         const CarType carType = CarType.SmallCar;
 

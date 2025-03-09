@@ -32,14 +32,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
-// Tracks whether a request is in progress
+const config = useRuntimeConfig()
 const loading = ref(false)
-
-// If you need reactive form state for <UForm>:
 const formState = ref({})
-
-// Data model for the dealership details
 const dealership = ref({
     dealerShipName: '',
     dealerShipShortName: '',
@@ -51,8 +46,7 @@ const dealership = ref({
 const getDealerShipSettings = async () => {
     loading.value = true
     try {
-        // Example endpoint; change to the actual URL you need
-        const response = await fetch('http://localhost:5270/settings')
+        const response = await fetch(`${config.public.apiBaseUrl}/settings`)
         const data = await response.json()
         dealership.value = data
     } catch (error) {
@@ -68,9 +62,8 @@ onMounted(getDealerShipSettings)
 const saveDealershipSettings = async () => {
     loading.value = true
     try {
-        // Example endpoint; change to the actual URL you need
-        const response = await fetch('http://localhost:5270/settings', {
-            method: 'POST', // or 'PUT', depending on your API
+        const response = await fetch(`${config.public.apiBaseUrl}/settings`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dealership.value)
         })

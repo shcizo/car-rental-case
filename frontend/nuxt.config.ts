@@ -2,5 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/ui"],
-  compatibilityDate: "2025-03-03"
+  compatibilityDate: "2025-03-03",
+  
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.API_BASE_URL ?? '',
+    }
+  },
 })

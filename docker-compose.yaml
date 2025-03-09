@@ -1,0 +1,50 @@
+services:
+  frontend:
+    build:
+      context: ./frontend  # Adjust path if needed
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"  # Nuxt default port
+    depends_on:
+      - backend
+    environment:
+      - NUXT_PUBLIC_API_BASE_URL=http://localhost:5001  # Point frontend to backend service
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend  # Adjust path if needed
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"  # .NET default port
+    depends_on:
+      - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionString="Data Source=database;Initial Catalog=CarRental;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=YourStrong!Passw0rd;Trust Server Certificate=True;"
+    networks:
+      - app-network
+
+  database:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: car-rental-db
+    ports:
+      - "1433:1433"  # Expose SQL port
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  sql-data:
+    driver: local

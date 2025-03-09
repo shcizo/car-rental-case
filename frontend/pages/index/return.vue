@@ -76,6 +76,7 @@ const booking = ref({
     returnOdometer: "",
     calculatedPrice: null
 });
+const config = useRuntimeConfig();
 
 const loading = ref(false);
 const initialized = ref(false);
@@ -86,7 +87,7 @@ const initializeReturn = async () => {
     loading.value = true;
 
     try {
-        const response = await fetch(`http://localhost:5270/bookings/${bookingNumber.value}`, { method: "GET" });
+        const response = await fetch(`${config.public.apiBaseUrl}/bookings/${bookingNumber.value}`, { method: "GET" });
         const data = await response.json();
 
         if (!data.handOutDateUtc) {
@@ -133,7 +134,7 @@ const submitReturn = async () => {
     submitting.value = true;
 
     try {
-        const response = await fetch(`http://localhost:5270/bookings/${bookingNumber.value}/return`, {
+        const response = await fetch(`${config.public.apiBaseUrl}/bookings/${bookingNumber.value}/return`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

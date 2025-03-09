@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(CreateCommand).Assembly));
-builder.Services.AddCors(s => s.AddPolicy("AllowAllOrigins", b => b.WithOrigins("*").AllowAnyHeader().AllowAnyMethod()));
-builder.Configuration.AddJsonFile("appsettings.development.json", false, false);
+builder.Services.AddCors(s => s.AddPolicy("AllowAllOrigins", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+builder.Configuration.AddJsonFile("appsettings.development.json", true, false);
 var app = builder.Build();
 
 app.MapBookingEndpoints();
@@ -19,9 +19,9 @@ app.MapCarEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseCors("AllowAllOrigins");
 }
 
+app.UseCors("AllowAllOrigins");
 app.UseHttpsRedirection();
 
 await app.RunAsync();

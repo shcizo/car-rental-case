@@ -64,6 +64,7 @@ import { ref, computed } from "vue";
 
 const initialized = ref(false);
 const items = ["SmallCar", "StationWagon", "Truck"];
+const config = useRuntimeConfig();
 const router = useRouter();
 const handout = ref({});
 
@@ -81,10 +82,8 @@ const loading = ref(false);
 
 const createBooking = async () => {
     loading.value = true;
-    console.log(booking.value)
-
     try {
-        const response = await fetch("http://localhost:5270/bookings/" + booking.value.bookingNumber, {
+        const response = await fetch(`${config.public.apiBaseUrl}/bookings/${booking.value.bookingNumber}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -104,7 +103,7 @@ const initializeBooking = async () => {
     loading.value = true;
 
     try {
-        const response = await fetch("http://localhost:5270/bookings/init", { method: "POST" });
+        const response = await fetch(`${config.public.apiBaseUrl}/bookings/init`, { method: "POST" });
         const data = await response.json();
         console.log("Data:", data);
         // Populate form fields
@@ -133,7 +132,7 @@ const handleCreate = async () => {
 
     try {
         creating.value = true;
-        const response = await fetch(`http://localhost:5270/cars/`, {
+        const response = await fetch(`${config.public.apiBaseUrl}/cars/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -163,7 +162,7 @@ const handleSearch = async () => {
     searching.value = true;
 
     try {
-        const response = await fetch(`http://localhost:5270/cars/${booking.value.registrationNumber}`, { method: "GET" });
+        const response = await fetch(`${config.public.apiBaseUrl}/cars/${booking.value.registrationNumber}`, { method: "GET" });
 
         if (response.status === 404) {
             carNotFound.value = true; // Show "Create" button
